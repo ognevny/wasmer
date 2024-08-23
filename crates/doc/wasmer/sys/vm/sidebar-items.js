@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["VMExtern"],"struct":["VMExternRef","VMFuncRef","VMFunction","VMFunctionBody","VMFunctionEnvironment","VMGlobal","VMInstance","VMMemory","VMTable"],"type":["VMExternFunction","VMExternGlobal","VMExternMemory","VMExternTable","VMFunctionCallback","VMTrampoline"]};

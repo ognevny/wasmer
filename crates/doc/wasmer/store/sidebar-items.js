@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["OnCalledAction"],"struct":["Store","StoreHandle","StoreId","StoreInner","StoreMut","StoreObjects","StoreRef"],"trait":["AsStoreMut","AsStoreRef","Tunables"],"type":["OnCalledHandler","TrapHandlerFn"]};

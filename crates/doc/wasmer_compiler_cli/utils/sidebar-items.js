@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["parse_envvar","parse_mapdir","retrieve_alias_pathbuf","wasmer_should_print_color"]};

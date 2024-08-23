@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["__typename","app","hostname","id","isDefault","kind","name","text","url"]};

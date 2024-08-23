@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"struct":["MiddlewareBinaryReader","MiddlewareReaderState"],"trait":["FunctionMiddleware","ModuleMiddleware","ModuleMiddlewareChain"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["wasmer_compiler_t","wasmer_engine_t"],"fn":["wasm_config_delete","wasm_config_new","wasm_config_set_compiler","wasm_config_set_engine","wasm_engine_delete","wasm_engine_new","wasm_engine_new_with_config"],"struct":["wasm_config_t","wasm_engine_t"]};

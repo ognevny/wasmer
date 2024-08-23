@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["MemoryError","MemoryStyle","TableStyle","VMExtern"],"struct":["VMConfig","VMExternRef","VMFuncRef","VMFunction","VMFunctionEnvironment","VMGlobal","VMInstance","VMMemory","VMMemoryDefinition","VMSharedMemory","VMTable","VMTableDefinition"],"trait":["LinearMemory"],"type":["VMTrampoline"]};

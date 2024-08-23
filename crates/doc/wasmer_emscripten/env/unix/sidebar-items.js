@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["_gai_strerror","_getaddrinfo","_getenv","_getgrnam","_getpwnam","_putenv","_setenv","_sysconf","_unsetenv"]};

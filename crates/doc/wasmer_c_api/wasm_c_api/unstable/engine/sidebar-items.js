@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["wasm_config_canonicalize_nans","wasm_config_set_features","wasm_config_set_target","wasmer_is_compiler_available","wasmer_is_engine_available","wasmer_is_headless"]};
