@@ -1489,6 +1489,20 @@
 <a href="#1489" id="1489">1489</a>
 <a href="#1490" id="1490">1490</a>
 <a href="#1491" id="1491">1491</a>
+<a href="#1492" id="1492">1492</a>
+<a href="#1493" id="1493">1493</a>
+<a href="#1494" id="1494">1494</a>
+<a href="#1495" id="1495">1495</a>
+<a href="#1496" id="1496">1496</a>
+<a href="#1497" id="1497">1497</a>
+<a href="#1498" id="1498">1498</a>
+<a href="#1499" id="1499">1499</a>
+<a href="#1500" id="1500">1500</a>
+<a href="#1501" id="1501">1501</a>
+<a href="#1502" id="1502">1502</a>
+<a href="#1503" id="1503">1503</a>
+<a href="#1504" id="1504">1504</a>
+<a href="#1505" id="1505">1505</a>
 </pre></div><pre class="rust"><code><span class="doccomment">//! Wasmer package definitions.
 //!
 //! Describes the contents of a `wasmer.toml` file.
@@ -1676,6 +1690,10 @@
 }
 
 <span class="kw">impl </span>Package {
+    <span class="kw">pub fn </span>new_empty() -&gt; <span class="self">Self </span>{
+        PackageBuilder::default().build().unwrap()
+    }
+
     <span class="doccomment">/// Create a [`PackageBuilder`] populated with all mandatory fields.
     </span><span class="kw">pub fn </span>builder(
         name: <span class="kw">impl </span>Into&lt;String&gt;,
@@ -1755,7 +1773,7 @@
 <span class="kw">impl </span>CommandV2 {
     <span class="doccomment">/// Get annotations, automatically loading them from a file relative to the
     /// `wasmer.toml`&#39;s directory, if necessary.
-    </span><span class="kw">pub fn </span>get_annotations(<span class="kw-2">&amp;</span><span class="self">self</span>, basepath: <span class="kw-2">&amp;</span>Path) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;serde_cbor::Value&gt;, String&gt; {
+    </span><span class="kw">pub fn </span>get_annotations(<span class="kw-2">&amp;</span><span class="self">self</span>, basepath: <span class="kw-2">&amp;</span>Path) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="prelude-ty">Option</span>&lt;ciborium::Value&gt;, String&gt; {
         <span class="kw">match </span><span class="self">self</span>.annotations.as_ref() {
             <span class="prelude-val">Some</span>(CommandAnnotations::Raw(v)) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(toml_to_cbor_value(v))),
             <span class="prelude-val">Some</span>(CommandAnnotations::File(FileCommandAnnotations { file, kind })) =&gt; {
@@ -1871,71 +1889,71 @@
     }
 }
 
-<span class="kw">fn </span>toml_to_cbor_value(val: <span class="kw-2">&amp;</span>toml::Value) -&gt; serde_cbor::Value {
+<span class="kw">fn </span>toml_to_cbor_value(val: <span class="kw-2">&amp;</span>toml::Value) -&gt; ciborium::Value {
     <span class="kw">match </span>val {
-        toml::Value::String(s) =&gt; serde_cbor::Value::Text(s.clone()),
-        toml::Value::Integer(i) =&gt; serde_cbor::Value::Integer(<span class="kw-2">*</span>i <span class="kw">as </span>i128),
-        toml::Value::Float(f) =&gt; serde_cbor::Value::Float(<span class="kw-2">*</span>f),
-        toml::Value::Boolean(b) =&gt; serde_cbor::Value::Bool(<span class="kw-2">*</span>b),
-        toml::Value::Datetime(d) =&gt; serde_cbor::Value::Text(<span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, d)),
+        toml::Value::String(s) =&gt; ciborium::Value::Text(s.clone()),
+        toml::Value::Integer(i) =&gt; ciborium::Value::Integer(ciborium::value::Integer::from(<span class="kw-2">*</span>i)),
+        toml::Value::Float(f) =&gt; ciborium::Value::Float(<span class="kw-2">*</span>f),
+        toml::Value::Boolean(b) =&gt; ciborium::Value::Bool(<span class="kw-2">*</span>b),
+        toml::Value::Datetime(d) =&gt; ciborium::Value::Text(<span class="macro">format!</span>(<span class="string">&quot;{}&quot;</span>, d)),
         toml::Value::Array(sq) =&gt; {
-            serde_cbor::Value::Array(sq.iter().map(toml_to_cbor_value).collect())
+            ciborium::Value::Array(sq.iter().map(toml_to_cbor_value).collect())
         }
-        toml::Value::Table(m) =&gt; serde_cbor::Value::Map(
+        toml::Value::Table(m) =&gt; ciborium::Value::Map(
             m.iter()
-                .map(|(k, v)| (serde_cbor::Value::Text(k.clone()), toml_to_cbor_value(v)))
+                .map(|(k, v)| (ciborium::Value::Text(k.clone()), toml_to_cbor_value(v)))
                 .collect(),
         ),
     }
 }
 
-<span class="kw">fn </span>json_to_cbor_value(val: <span class="kw-2">&amp;</span>serde_json::Value) -&gt; serde_cbor::Value {
+<span class="kw">fn </span>json_to_cbor_value(val: <span class="kw-2">&amp;</span>serde_json::Value) -&gt; ciborium::Value {
     <span class="kw">match </span>val {
-        serde_json::Value::Null =&gt; serde_cbor::Value::Null,
-        serde_json::Value::Bool(b) =&gt; serde_cbor::Value::Bool(<span class="kw-2">*</span>b),
+        serde_json::Value::Null =&gt; ciborium::Value::Null,
+        serde_json::Value::Bool(b) =&gt; ciborium::Value::Bool(<span class="kw-2">*</span>b),
         serde_json::Value::Number(n) =&gt; {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = n.as_i64() {
-                serde_cbor::Value::Integer(i <span class="kw">as </span>i128)
+                ciborium::Value::Integer(ciborium::value::Integer::from(i))
             } <span class="kw">else if let </span><span class="prelude-val">Some</span>(u) = n.as_u64() {
-                serde_cbor::Value::Integer(u <span class="kw">as </span>i128)
+                ciborium::Value::Integer(ciborium::value::Integer::from(u))
             } <span class="kw">else if let </span><span class="prelude-val">Some</span>(f) = n.as_f64() {
-                serde_cbor::Value::Float(f)
+                ciborium::Value::Float(f)
             } <span class="kw">else </span>{
-                serde_cbor::Value::Null
+                ciborium::Value::Null
             }
         }
-        serde_json::Value::String(s) =&gt; serde_cbor::Value::Text(s.clone()),
+        serde_json::Value::String(s) =&gt; ciborium::Value::Text(s.clone()),
         serde_json::Value::Array(sq) =&gt; {
-            serde_cbor::Value::Array(sq.iter().map(json_to_cbor_value).collect())
+            ciborium::Value::Array(sq.iter().map(json_to_cbor_value).collect())
         }
-        serde_json::Value::Object(m) =&gt; serde_cbor::Value::Map(
+        serde_json::Value::Object(m) =&gt; ciborium::Value::Map(
             m.iter()
-                .map(|(k, v)| (serde_cbor::Value::Text(k.clone()), json_to_cbor_value(v)))
+                .map(|(k, v)| (ciborium::Value::Text(k.clone()), json_to_cbor_value(v)))
                 .collect(),
         ),
     }
 }
 
-<span class="kw">fn </span>yaml_to_cbor_value(val: <span class="kw-2">&amp;</span>serde_yaml::Value) -&gt; serde_cbor::Value {
+<span class="kw">fn </span>yaml_to_cbor_value(val: <span class="kw-2">&amp;</span>serde_yaml::Value) -&gt; ciborium::Value {
     <span class="kw">match </span>val {
-        serde_yaml::Value::Null =&gt; serde_cbor::Value::Null,
-        serde_yaml::Value::Bool(b) =&gt; serde_cbor::Value::Bool(<span class="kw-2">*</span>b),
+        serde_yaml::Value::Null =&gt; ciborium::Value::Null,
+        serde_yaml::Value::Bool(b) =&gt; ciborium::Value::Bool(<span class="kw-2">*</span>b),
         serde_yaml::Value::Number(n) =&gt; {
             <span class="kw">if let </span><span class="prelude-val">Some</span>(i) = n.as_i64() {
-                serde_cbor::Value::Integer(i <span class="kw">as </span>i128)
+                ciborium::Value::Integer(ciborium::value::Integer::from(i))
             } <span class="kw">else if let </span><span class="prelude-val">Some</span>(u) = n.as_u64() {
-                serde_cbor::Value::Integer(u <span class="kw">as </span>i128)
+                ciborium::Value::Integer(ciborium::value::Integer::from(u))
             } <span class="kw">else if let </span><span class="prelude-val">Some</span>(f) = n.as_f64() {
-                serde_cbor::Value::Float(f)
+                ciborium::Value::Float(f)
             } <span class="kw">else </span>{
-                serde_cbor::Value::Null
+                ciborium::Value::Null
             }
         }
-        serde_yaml::Value::String(s) =&gt; serde_cbor::Value::Text(s.clone()),
+        serde_yaml::Value::String(s) =&gt; ciborium::Value::Text(s.clone()),
         serde_yaml::Value::Sequence(sq) =&gt; {
-            serde_cbor::Value::Array(sq.iter().map(yaml_to_cbor_value).collect())
+            ciborium::Value::Array(sq.iter().map(yaml_to_cbor_value).collect())
         }
-        serde_yaml::Value::Mapping(m) =&gt; serde_cbor::Value::Map(
+        serde_yaml::Value::Mapping(m) =&gt; ciborium::Value::Map(
             m.iter()
                 .map(|(k, v)| (yaml_to_cbor_value(k), yaml_to_cbor_value(v)))
                 .collect(),
@@ -2223,6 +2241,16 @@
 }
 
 <span class="kw">impl </span>Manifest {
+    <span class="kw">pub fn </span>new_empty() -&gt; <span class="self">Self </span>{
+        <span class="self">Self </span>{
+            package: <span class="prelude-val">None</span>,
+            dependencies: HashMap::new(),
+            fs: IndexMap::new(),
+            modules: Vec::new(),
+            commands: Vec::new(),
+        }
+    }
+
     <span class="doccomment">/// Create a [`ManifestBuilder`] populated with all mandatory fields.
     </span><span class="kw">pub fn </span>builder(package: Package) -&gt; ManifestBuilder {
         ManifestBuilder::new(package)
